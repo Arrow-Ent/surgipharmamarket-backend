@@ -1,0 +1,1 @@
+// Product routes wired with controllers and middleware
