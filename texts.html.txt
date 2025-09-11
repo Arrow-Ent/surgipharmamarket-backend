@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SurgiPharmaMarket API Tester</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; }
+    h1 { color: #2c3e50; }
+    form { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    input, button { margin: 5px 0; padding: 10px; width: 100%; }
+    button { background: #27ae60; color: #fff; border: none; cursor: pointer; }
+    button:hover { background: #219150; }
+    .output { white-space: pre-wrap; background: #eef; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>SurgiPharmaMarket API Tester</h1>
+
+  <!-- Buyer Registration -->
+  <form id="buyerForm">
+    <h2>Register Buyer</h2>
+    <input type="text" id="buyerName" placeholder="Name" required>
+    <input type="email" id="buyerEmail" placeholder="Email" required>
+    <input type="password" id="buyerPassword" placeholder="Password" required>
+    <button type="submit">Register Buyer</button>
+  </form>
+
+  <!-- Seller Registration -->
+  <form id="sellerForm">
+    <h2>Register Seller</h2>
+    <input type="text" id="sellerName" placeholder="Name" required>
+    <input type="email" id="sellerEmail" placeholder="Email" required>
+    <input type="password" id="sellerPassword" placeholder="Password" required>
+    <button type="submit">Register Seller</button>
+  </form>
+
+  <!-- Add Product -->
+  <form id="productForm">
+    <h2>Add Product</h2>
+    <input type="text" id="productName" placeholder="Product Name" required>
+    <input type="number" id="productPrice" placeholder="Price" required>
+    <input type="number" id="productStock" placeholder="Stock" required>
+    <button type="submit">Add Product</button>
+  </form>
+
+  <!-- Get Products -->
+  <button id="getProducts">Get All Products</button>
+
+  <h2>Output</h2>
+  <div class="output" id="output"></div>
+
+  <script>
+    const API_URL = "http://localhost:3000/api"; // change to your deployed Render backend later
+    const outputDiv = document.getElementById("output");
+
+    function showOutput(data) {
+      outputDiv.textContent = JSON.stringify(data, null, 2);
+    }
+
+    // Buyer Register
+    document.getElementById("buyerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch(`${API_URL}/buyers/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: document.getElementById("buyerName").value,
+          email: document.getElementById("buyerEmail").value,
+          password: document.getElementById("buyerPassword").value
+        })
+      });
+      showOutput(await res.json());
+    });
+
+    // Seller Register
+    document.getElementById("sellerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch(`${API_URL}/sellers/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: document.getElementById("sellerName").value,
+          email: document.getElementById("sellerEmail").value,
+          password: document.getElementById("sellerPassword").value
+        })
+      });
+      showOutput(await res.json());
+    });
+
+    // Add Product
+    document.getElementById("productForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch(`${API_URL}/products`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: document.getElementById("productName").value,
+          price: parseFloat(document.getElementById("productPrice").value),
+          stock: parseInt(document.getElementById("productStock").value)
+        })
+      });
+      showOutput(await res.json());
+    });
+
+    // Get Products
+    document.getElementById("getProducts").addEventListener("click", async () => {
+      const res = await fetch(`${API_URL}/products`);
+      showOutput(await res.json());
+    });
+  </script>
+</body>
+</html>
