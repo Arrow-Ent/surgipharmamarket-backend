@@ -58,6 +58,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message });
 });
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the SurgiPharma Market API!");
+});
+
 // ✅ MongoDB connection and server start
 async function start() {
   try {
